@@ -77,6 +77,12 @@ Results are saved as CSV files under `sc_dir`:
 
 ---
 
+## Data
+
+Simulated scenarios can be accessed from here: https://doi.org/10.6084/m9.figshare.31766107
+
+---
+
 ## Citation
 
 If you use sBEE in your work, please cite:
