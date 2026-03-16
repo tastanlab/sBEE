@@ -1,0 +1,61 @@
+import numpy as np
+import pandas as pd
+from scipy.sparse.csgraph import connected_components
+
+
+def graph_connectivity_per_celltype(adata, label_key):
+    """Graph Connectivity (adapted from https://github.com/theislab/scib/blob/main/scib/metrics/graph_connectivity.py)
+
+    Quantify the connectivity of the subgraph per cell type label.
+
+    .. math::
+
+        GC_c = \\frac {|{LCC(subgraph_c)}|} {|c|}   for all c \\in C
+
+    where :math: `C` stands for all cell type labels, :math:`|LCC(subgraph_c)|` stands for all cells in the largest connected component and :math:`|c|` stands for all cells of
+    cell type :math:`c`.
+
+    :param adata: integrated adata with computed neighborhood graph
+    :param label_key: name in adata.obs containing the cell identity labels
+
+    This function can be applied to all integration output types.
+    The integrated object (``adata``) needs to have a kNN graph based on the integration output.
+    See :ref:`preprocessing` for more information on preprocessing.
+
+    **Examples**
+
+    .. code-block:: python
+
+        # feature output
+        scib.pp.reduce_data(
+            adata, n_top_genes=2000, batch_key="batch", pca=True, neighbors=True
+        )
+        scib.me.graph_connectivity(adata, label_key="celltype")
+
+        # embedding output
+        sc.pp.neighbors(adata, use_rep="X_emb")
+        scib.me.graph_connectivity(adata, label_key="celltype")
+
+        # knn output
+        scib.me.graph_connectivity(adata, label_key="celltype")
+
+    """
+    if "neighbors" not in adata.uns:
+        raise KeyError(
+            "Please compute the neighborhood graph before running this function!"
+        )
+
+    # clust_res = []
+    clust_res = {}
+
+    for label in adata.obs[label_key].cat.categories:
+        adata_sub = adata[adata.obs[label_key].isin([label])]
+        _, labels = connected_components(
+            adata_sub.obsp["connectivities"], connection="strong"
+        )
+        tab = pd.value_counts(labels)
+        # clust_res.append(tab.max() / sum(tab))
+        clust_res[label] = tab.max() / sum(tab)
+
+    # return np.mean(clust_res)
+    return clust_res
