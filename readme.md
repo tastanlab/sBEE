@@ -86,5 +86,14 @@ Simulated scenarios can be accessed from here: https://doi.org/10.6084/m9.figsha
 ## Citation
 
 If you use sBEE in your work, please cite:
-
-> *Coming soon*
+```bibtex
+@article {Myradov2026.04.22.720135,
+	author = {Myradov, Mekan and HOUDJEDJ, Aissa and Tastan, Oznur and Kazan, Hilal},
+	title = {A Systematic Evaluation of Single-Cell Batch Integration Metrics and sBEE: A Robust New Metric},
+	elocation-id = {2026.04.22.720135},
+	year = {2026},
+	doi = {10.64898/2026.04.22.720135},
+	publisher = {Cold Spring Harbor Laboratory},
+	journal = {bioRxiv}
+}
+```
